@@ -7,6 +7,7 @@ import {
   StyleSheet,
   SafeAreaView,
 } from "react-native";
+import Checkbox from 'expo-checkbox';
 import { useState } from "react";
 import Header from "../components/Header";
 import colors from "../Reusable_Objects/color";
@@ -16,6 +17,7 @@ function Start({}) {
     const [email, setEmail] = useState("");
     const [nameConfirmed, setNameConfirmed] = useState(true);
     const [emailConfirmed, setEmailConfirmed] = useState(true);
+    const [notRobot, setNotRobot] = useState(false);
 
     const checkName = () => {
         const isEveryCharNaN = name.split('').every(char => isNaN(char));
@@ -29,6 +31,11 @@ function Start({}) {
     checkEmail(email);
     checkName(name);
   };
+
+  const clearInputs = () => {
+    setName("");
+    setEmail("");
+  }
   return (
     <Modal>
       <SafeAreaView style={styles.container}>
@@ -37,6 +44,7 @@ function Start({}) {
             <View style={styles.divison}>
           <Header name={"Name"} color={colors.purple}></Header>
           <TextInput
+            value={name}
             style={styles.textInput}
             onChangeText={(text) => {
               setName(text);
@@ -49,21 +57,32 @@ function Start({}) {
           <View style={styles.divison}>
           <Header name={"Email address"} color={colors.purple}></Header>
           <TextInput style={styles.textInput}
+          value={email}
           onChangeText={(text)=>{setEmail(text)}}
           onFocus={()=>setEmailConfirmed(true)}
           onBlur={checkEmail} >
           </TextInput>
             {emailConfirmed ? null : <Text>Invalid Email!</Text>}
             </View>
+            <View style={{flexDirection:"row"}}>
+              <Checkbox
+              value={notRobot}
+              onValueChange={(value)=>{setNotRobot(value)}}></Checkbox>
+              <Text style={{marginLeft: 10}}>I am not a robot</Text>
+            </View>
           <View style={styles.buttonContainer}>
           <Button
             title="Reset"
             color={colors.red}
             onPress={() => {
-              checkInputs();
+              clearInputs();
             }}
           ></Button>
-          <Button title="Start" color={colors.white} onPress={checkInputs}></Button>
+          <Button
+           title="Start"
+           color={colors.white} 
+           onPress={checkInputs}
+           disabled={!notRobot}></Button>
         </View>
         </View>
         
