@@ -1,9 +1,9 @@
 import {Text} from 'react-native';
 
-function Header({name}) {
+function Header({name, color}) {
 
     return(
-        <Text>{name}</Text>
+        <Text style={{color:color}}>{name}</Text>
     )
 }
 
