@@ -6,10 +6,24 @@ import {
   StyleSheet,
   SafeAreaView,
 } from "react-native";
+import { useState } from "react";
 import Header from "../components/Header";
 import colors from "../Reusable_Objects/color";
 
-function Start() {
+function Start({}) {
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [nameConfirmed, setNameConfirmed] = useState(true);
+    const [emailConfirmed, setEmailConfirmed] = useState(true);
+
+    const checkName = (name) => {
+        const isEveryCharNaN = name.split('').every(char => isNaN(char));
+        setNameConfirmed(isEveryCharNaN && name.length > 1);
+    };
+    const checkEmail = (email) => {
+        const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        setEmailConfirmed(isValidEmail);
+    };
   const checkInputs = () => {
     console.log("Checking inputs");
   };
@@ -26,13 +40,13 @@ function Start() {
           <TextInput style={styles.textInput}></TextInput>
           <View style={styles.buttonContainer}>
           <Button
-            title="Submit"
+            title="Reset"
             color={colors.red}
             onPress={() => {
               checkInputs();
             }}
           ></Button>
-          <Button title="sfd"></Button>
+          <Button title="Start" color={colors.white} onPress={checkInputs}></Button>
         </View>
         </View>
         
