@@ -1,6 +1,7 @@
 import {
   Button,
   Modal,
+  Text,
   TextInput,
   View,
   StyleSheet,
@@ -16,16 +17,17 @@ function Start({}) {
     const [nameConfirmed, setNameConfirmed] = useState(true);
     const [emailConfirmed, setEmailConfirmed] = useState(true);
 
-    const checkName = (name) => {
+    const checkName = () => {
         const isEveryCharNaN = name.split('').every(char => isNaN(char));
         setNameConfirmed(isEveryCharNaN && name.length > 1);
     };
-    const checkEmail = (email) => {
+    const checkEmail = () => {
         const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
         setEmailConfirmed(isValidEmail);
     };
   const checkInputs = () => {
-    console.log("Checking inputs");
+    checkEmail(email);
+    checkName(name);
   };
   return (
     <Modal>
@@ -35,9 +37,20 @@ function Start({}) {
           <Header name={"Name"} color={colors.purple}></Header>
           <TextInput
             style={[styles.textInput, { marginBottom: 20 }]}
+            onChangeText={(text) => {
+              setName(text);
+            }}
+            onFocus={()=>{setNameConfirmed(true)}}
+            onBlur={checkName}
           ></TextInput>
+          {nameConfirmed ? null : <Text >Invalid Name!</Text>}
           <Header name={"Email address"} color={colors.purple}></Header>
-          <TextInput style={styles.textInput}></TextInput>
+          <TextInput style={styles.textInput}
+          onChangeText={(text)=>{setEmail(text)}}
+          onFocus={()=>setEmailConfirmed(true)}
+          onBlur={checkEmail} >
+          </TextInput>
+            {emailConfirmed ? null : <Text>Invalid Email!</Text>}
           <View style={styles.buttonContainer}>
           <Button
             title="Reset"
