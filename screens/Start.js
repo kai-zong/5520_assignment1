@@ -34,9 +34,10 @@ function Start({}) {
       <SafeAreaView style={styles.container}>
         <Header name={"Welcome"} color={colors.blue} />
         <View style={styles.inputCard}>
+            <View style={styles.divison}>
           <Header name={"Name"} color={colors.purple}></Header>
           <TextInput
-            style={[styles.textInput, { marginBottom: 20 }]}
+            style={styles.textInput}
             onChangeText={(text) => {
               setName(text);
             }}
@@ -44,6 +45,8 @@ function Start({}) {
             onBlur={checkName}
           ></TextInput>
           {nameConfirmed ? null : <Text >Invalid Name!</Text>}
+          </View>
+          <View style={styles.divison}>
           <Header name={"Email address"} color={colors.purple}></Header>
           <TextInput style={styles.textInput}
           onChangeText={(text)=>{setEmail(text)}}
@@ -51,6 +54,7 @@ function Start({}) {
           onBlur={checkEmail} >
           </TextInput>
             {emailConfirmed ? null : <Text>Invalid Email!</Text>}
+            </View>
           <View style={styles.buttonContainer}>
           <Button
             title="Reset"
@@ -86,6 +90,9 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     // Elevation for Android
     elevation: 5,
+  },
+  divison: {
+    marginBottom: 20,
   },
   textInput: {
     height: 40,
