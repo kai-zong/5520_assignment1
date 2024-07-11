@@ -12,11 +12,13 @@ import { useState } from "react";
 import Header from "../components/Header";
 import colors from "../Reusable_Objects/color";
 
-function Start({}) {
+function Start({startHandler}) {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [nameConfirmed, setNameConfirmed] = useState(true);
     const [emailConfirmed, setEmailConfirmed] = useState(true);
+    const [nameFocused, setNameFocused] = useState(true);
+    const [emailFocused, setEmailFocused] = useState(true);
     const [notRobot, setNotRobot] = useState(false);
 
     const checkName = () => {
@@ -25,17 +27,23 @@ function Start({}) {
     };
     const checkEmail = () => {
         const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        console.log("is Valid email",isValidEmail);
         setEmailConfirmed(isValidEmail);
     };
-  const checkInputs = () => {
-    checkEmail(email);
-    checkName(name);
-  };
+    const checkInputs = () => {
+      checkEmail(email);
+      checkName(name);
+      console.log(name, email);
+      console.log(nameConfirmed, emailConfirmed, notRobot);
+      if(nameConfirmed && emailConfirmed && notRobot){
+        startHandler(name, email);
+      }
+    };
 
-  const clearInputs = () => {
-    setName("");
-    setEmail("");
-  }
+    const clearInputs = () => {
+      setName("");
+      setEmail("");
+    }
   return (
     <Modal>
       <SafeAreaView style={styles.container}>
@@ -49,20 +57,20 @@ function Start({}) {
             onChangeText={(text) => {
               setName(text);
             }}
-            onFocus={()=>{setNameConfirmed(true)}}
+            onFocus={()=>{setNameFocused(true)}}
             onBlur={checkName}
           ></TextInput>
-          {nameConfirmed ? null : <Text >Invalid Name!</Text>}
+          {(!nameFocused && !nameConfirmed) && <Text >Invalid Name!</Text>}
           </View>
           <View style={styles.divison}>
           <Header name={"Email address"} color={colors.purple}></Header>
           <TextInput style={styles.textInput}
           value={email}
           onChangeText={(text)=>{setEmail(text)}}
-          onFocus={()=>setEmailConfirmed(true)}
+          onFocus={()=>setEmailFocused(true)}
           onBlur={checkEmail} >
           </TextInput>
-            {emailConfirmed ? null : <Text>Invalid Email!</Text>}
+            { (!emailFocused && !emailConfirmed) && <Text>Invalid Email!</Text>}
             </View>
             <View style={{flexDirection:"row"}}>
               <Checkbox

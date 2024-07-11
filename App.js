@@ -1,22 +1,29 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, } from 'react-native';
 import Start from "./screens/Start";
-import { useState } from 'react';
+import { useState }  from 'react';
+import Confirm from "./screens/Confirm";
 
 export default function App() {
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [isVisible, setIsVisible] = useState(false);
   const handleStart = (name, email) => {
     setName(name);
     setEmail(email);
+    setIsVisible(true);
+    console.log("handlestart is called");
   };
-  const handleReset = () => {
-    console.log("Resetting the app")}
+
+  const handleGoBack = () => {
+    setIsVisible(false);
+  }
 
   return (
     <View style={styles.container}>
-      <Start startHandler={handleStart} resetHandler={handleReset}></Start>
+      <Start startHandler={handleStart}></Start>
+      <Confirm visibility={isVisible} email={email} name={name} goBackHandler={handleGoBack}></Confirm>
       <StatusBar style="auto" />
     </View>
   );
