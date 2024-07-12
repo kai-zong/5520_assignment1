@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, } from 'react-native';
 import Start from "./screens/Start";
 import { useState }  from 'react';
 import Confirm from "./screens/Confirm";
+import Game from './screens/Game';
 
 export default function App() {
 
@@ -22,8 +23,9 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <Start startHandler={handleStart}></Start>
-      <Confirm visibility={isVisible} email={email} name={name} goBackHandler={handleGoBack}></Confirm>
+      {/* <Start startHandler={handleStart}></Start>
+      <Confirm visibility={isVisible} email={email} name={name} goBackHandler={handleGoBack}></Confirm> */}
+      <Game/>
       <StatusBar style="auto" />
     </View>
   );
