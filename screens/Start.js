@@ -15,8 +15,8 @@ import colors from "../Reusable_Objects/color";
 function Start({startHandler}) {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
-    const [nameConfirmed, setNameConfirmed] = useState(true);
-    const [emailConfirmed, setEmailConfirmed] = useState(true);
+    const [nameConfirmed, setNameConfirmed] = useState(false);
+    const [emailConfirmed, setEmailConfirmed] = useState(false);
     const [nameFocused, setNameFocused] = useState(true);
     const [emailFocused, setEmailFocused] = useState(true);
     const [notRobot, setNotRobot] = useState(false);
@@ -33,8 +33,10 @@ function Start({startHandler}) {
     const checkInputs = () => {
       checkEmail(email);
       checkName(name);
+      setEmailFocused(false);
+      setNameFocused(false);
       console.log(name, email);
-      console.log(nameConfirmed, emailConfirmed, notRobot);
+      console.log("name confirmed: ",nameConfirmed,"email confirmed: ", emailConfirmed, "name focuse: ", nameFocused, "email focused: ", emailFocused);
       if(nameConfirmed && emailConfirmed && notRobot){
         startHandler(name, email);
       }
@@ -58,7 +60,9 @@ function Start({startHandler}) {
               setName(text);
             }}
             onFocus={()=>{setNameFocused(true)}}
-            onBlur={checkName}
+            onBlur={()=>{checkName
+              setNameFocused(false)}
+            }
           ></TextInput>
           {(!nameFocused && !nameConfirmed) && <Text >Invalid Name!</Text>}
           </View>
@@ -68,7 +72,9 @@ function Start({startHandler}) {
           value={email}
           onChangeText={(text)=>{setEmail(text)}}
           onFocus={()=>setEmailFocused(true)}
-          onBlur={checkEmail} >
+          onBlur={()=>{checkEmail
+            setEmailFocused(false)
+          }} >
           </TextInput>
             { (!emailFocused && !emailConfirmed) && <Text>Invalid Email!</Text>}
             </View>
