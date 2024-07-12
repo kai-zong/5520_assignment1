@@ -24,9 +24,7 @@ const Game = () => {
 };
 
 const GameComponent = ({ initialTime, initialAttempts, onRestart }) => {
-  const [isTimeOut, setIsTimeOut] = useState(false);
   const [timer, setTimer] = useState(initialTime);
-  const [isWin, setIsWin] = useState(false);
   const [guessesLeft, setGuessesLeft] = useState(initialAttempts);
   const [hint, setHint] = useState("");
   const [hintsGiven, setHintsGiven] = useState(false);
@@ -37,6 +35,7 @@ const GameComponent = ({ initialTime, initialAttempts, onRestart }) => {
   const [infoImages, setInfoImages] = useState([]);
   const [infoButtons, setInfoButtons] = useState([]);
   const [loseMessage, setLoseMessage] = useState("");
+  const [isNumberValid, setIsNumberValid] = useState(true);
 
   const giveHint = () => {
     setHintsGiven(true);
@@ -49,10 +48,12 @@ const GameComponent = ({ initialTime, initialAttempts, onRestart }) => {
 
   const submitGuess = () => {
     const guessNumber = parseInt(guess, 10);
+    if(guessNumber < 1 || guessNumber > 100) {
+      setIsNumberValid(false);
+      return;
+    }
+    setIsNumberValid(true);
     if (guessNumber === number) {
-      setIsInfoVisible(true);
-      setIsWin(true);
-      setIsInfoVisible(true);
       setInfoTexts(["You win!"]);
       setInfoTexts((currentTexts) => [...currentTexts, "Attempts used: " + (initialAttempts - guessesLeft)]);
       setInfoImages([`https://picsum.photos/id/${number}/100/100`]);
@@ -60,12 +61,11 @@ const GameComponent = ({ initialTime, initialAttempts, onRestart }) => {
       return;
     }
     if (guessesLeft === 1) {
-      setIsInfoVisible(true);
       setInfoTexts(["You are out of Attempts!", `You lost! The correct number was ${number}.`]);
-      setIsInfoVisible(true);
       setInfoButtons([{ title: "Play Again", onPress: onRestart }]);
       return;
     }
+    setIsInfoVisible(true);
     setInfoTexts(["Wrong guess! Try again."]);
     setInfoButtons( [{ title: "OK", onPress: () => setIsInfoVisible(false) }, {title: "End Game", onPress: onRestart}]);
     setGuessesLeft(prevGuessesLeft => prevGuessesLeft - 1);
@@ -80,11 +80,10 @@ const GameComponent = ({ initialTime, initialAttempts, onRestart }) => {
       return () => clearInterval(intervalId);
     }
 
-    if (timer === 0 && !isWin) {
-      setIsTimeOut(true);
-      setLoseMessage("Time's up! You are out of time.");
+    if (timer === 0 && !isInfoVisible) {
+      setInfoTexts(["Time's up! You are out of time."]);
       setIsInfoVisible(true);
-      setInfoTexts([`You lost! The correct number was ${number}.`]);
+      setInfoTexts((currentTexts) => [...currentTexts, `You lost! The correct number was ${number}.`]);
       setInfoButtons([{ title: "Play Again", onPress: onRestart }]);
     }
   }, [timer]);
@@ -94,7 +93,7 @@ const GameComponent = ({ initialTime, initialAttempts, onRestart }) => {
       <Modal visible={true}>
         <View>
           <Button title="Restart" onPress={onRestart} />
-          <View>
+          <View style={styles.guessContainer}>
             <Header name="Guess a number between 1 & 100" color="blue" />
             <TextInput
               style={styles.inputText}
@@ -105,8 +104,7 @@ const GameComponent = ({ initialTime, initialAttempts, onRestart }) => {
             />
             <Text>Guesses left: {guessesLeft}</Text>
             <Text>Timer: {timer} seconds</Text>
-            <Text>{isTimeOut ? "Time's up!" : ""}</Text>
-            <Text>{isWin ? "You win!" : ""}</Text>
+            {!isNumberValid && <Text>Please Enter a Number in 1 - 100</Text>}
             {hintsGiven && <Text>{hint}</Text>}
             <Button title="Use a Hint" onPress={giveHint} />
             <Button title="Submit Guess" onPress={submitGuess} />
@@ -132,5 +130,10 @@ const styles = StyleSheet.create({
     borderColor: "black",
     padding: 10,
     margin: 10,
+  },
+  guessContainer: {
+    marginTop: 20,
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
