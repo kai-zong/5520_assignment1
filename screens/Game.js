@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Modal, View, StyleSheet, Button, TextInput, Text } from "react-native";
 import Header from "../components/Header";
 import Information from "./Information";
+import colors from "../Reusable_Objects/color";
 
 const Game = () => {
   const initialTime = 60;
@@ -34,7 +35,6 @@ const GameComponent = ({ initialTime, initialAttempts, onRestart }) => {
   const [infoTexts, setInfoTexts] = useState([]);
   const [infoImages, setInfoImages] = useState([]);
   const [infoButtons, setInfoButtons] = useState([]);
-  const [loseMessage, setLoseMessage] = useState("");
   const [isNumberValid, setIsNumberValid] = useState(true);
 
   const giveHint = () => {
@@ -89,9 +89,9 @@ const GameComponent = ({ initialTime, initialAttempts, onRestart }) => {
   }, [timer]);
 
   return (
-    <View>
+    <View >
       <Modal visible={true}>
-        <View>
+        <View style={styles.container}>
           <Button title="Restart" onPress={onRestart} />
           <View style={styles.guessContainer}>
             <Header name="Guess a number between 1 & 100" color="blue" />
@@ -109,15 +109,15 @@ const GameComponent = ({ initialTime, initialAttempts, onRestart }) => {
             <Button title="Use a Hint" onPress={giveHint} />
             <Button title="Submit Guess" onPress={submitGuess} />
           </View>
-          <Text>{loseMessage}</Text>
-        </View>
-      </Modal>
-      <Information
+          <Information
         visibility={isInfoVisible}
         texts={infoTexts}
         images={infoImages}
         buttons={infoButtons}
       />
+        </View>
+      </Modal>
+      
     </View>
   );
 };
@@ -131,9 +131,18 @@ const styles = StyleSheet.create({
     padding: 10,
     margin: 10,
   },
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   guessContainer: {
+    backgroundColor: "gray",
+    padding: 10,
+    width: "80%",
     marginTop: 20,
     alignItems: "center",
     justifyContent: "center",
+    gap: 10,
   },
 });
