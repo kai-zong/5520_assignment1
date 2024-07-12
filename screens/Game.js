@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Modal, View, StyleSheet, Button, TextInput, Text } from "react-native";
+import { Modal, View, StyleSheet, Button, TextInput, Text, SafeAreaView } from "react-native";
 import Header from "../components/Header";
 import Information from "./Information";
 import colors from "../Reusable_Objects/color";
 
-const Game = () => {
+const Game = ({infoVisibilityHandler}) => {
   const initialTime = 60;
   const initialAttempts = 4;
   const [gameKey, setGameKey] = useState(0);
@@ -36,6 +36,7 @@ const GameComponent = ({ initialTime, initialAttempts, onRestart }) => {
   const [infoImages, setInfoImages] = useState([]);
   const [infoButtons, setInfoButtons] = useState([]);
   const [isNumberValid, setIsNumberValid] = useState(true);
+  const [isWinning, setIsWinning] = useState(false);
 
   const giveHint = () => {
     setHintsGiven(true);
@@ -47,30 +48,36 @@ const GameComponent = ({ initialTime, initialAttempts, onRestart }) => {
   };
 
   const submitGuess = () => {
+    
     const guessNumber = parseInt(guess, 10);
-    if(guessNumber < 1 || guessNumber > 100) {
+    if(guessNumber < 1 || guessNumber > 100 || isNaN(guessNumber)) {
       setIsNumberValid(false);
       return;
     }
     setIsNumberValid(true);
     if (guessNumber === number) {
+      const updatedGuessesLeft = guessesLeft - 1;
       setIsInfoVisible(true);
-      setInfoTexts(["You win!"]);
-      setInfoTexts((currentTexts) => [...currentTexts, "Attempts used: " + (initialAttempts - guessesLeft)]);
+      setGuessesLeft(updatedGuessesLeft);
+      setInfoTexts(["You win!", `Attempts used: ${initialAttempts - updatedGuessesLeft}`]);
       setInfoImages([`https://picsum.photos/id/${number}/100/100`]);
       setInfoButtons([{ title: "Play Again", onPress: onRestart }]);
+      setIsWinning(true);
       return;
     }
     if (guessesLeft === 1) {
+      setIsWinning(false);
       setIsInfoVisible(true);
       setInfoTexts(["You are out of Attempts!", `You lost! The correct number was ${number}.`]);
+      setInfoImages([]);
       setInfoButtons([{ title: "Play Again", onPress: onRestart }]);
       return;
     }
+    setGuessesLeft(prevGuessesLeft => prevGuessesLeft - 1);
     setIsInfoVisible(true);
+    setInfoImages([]);
     setInfoTexts(["Wrong guess! Try again."]);
     setInfoButtons( [{ title: "OK", onPress: () => setIsInfoVisible(false) }, {title: "End Game", onPress: onRestart}]);
-    setGuessesLeft(prevGuessesLeft => prevGuessesLeft - 1);
   };
 
   useEffect(() => {
@@ -83,6 +90,7 @@ const GameComponent = ({ initialTime, initialAttempts, onRestart }) => {
     }
 
     if (timer === 0 && !isInfoVisible) {
+      setIsWinning(false);
       setInfoTexts(["Time's up! You are out of time."]);
       setIsInfoVisible(true);
       setInfoTexts((currentTexts) => [...currentTexts, `You lost! The correct number was ${number}.`]);
@@ -91,36 +99,40 @@ const GameComponent = ({ initialTime, initialAttempts, onRestart }) => {
   }, [timer]);
 
   return (
-    <View >
-      <Modal visible={true}>
-        <View style={styles.container}>
-          <Button title="Restart" onPress={onRestart} />
-          <View style={styles.guessContainer}>
-            <Header name="Guess a number between 1 & 100" color="blue" />
-            <TextInput
-              style={styles.inputText}
-              value={guess}
-              onChangeText={setGuess}
-              keyboardType="number-pad"
-              placeholder="Enter your guess"
-            />
-            <Text>Guesses left: {guessesLeft}</Text>
-            <Text>Timer: {timer} seconds</Text>
-            {!isNumberValid && <Text>Please Enter a Number in 1 - 100</Text>}
-            {hintsGiven && <Text>{hint}</Text>}
-            <Button title="Use a Hint" onPress={giveHint} />
-            <Button title="Submit Guess" onPress={submitGuess} />
-          </View>
-          <Information
-        visibility={isInfoVisible}
-        texts={infoTexts}
-        images={infoImages}
-        buttons={infoButtons}
-      />
+    <Modal visible={true}>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.topContainer}>
+          <Button title="Restart" onPress={onRestart} style={styles.restartButton} />
         </View>
-      </Modal>
-      
-    </View>
+        <View style={styles.guessContainer}>
+          <Header name="Guess a number between 1 & 100" color="blue" />
+          <TextInput
+            style={styles.inputText}
+            value={guess}
+            onChangeText={setGuess}
+            keyboardType="number-pad"
+            placeholder="Enter your guess"
+          />
+          <Text>{number}</Text>
+          <Text>Guesses left: {guessesLeft}</Text>
+          <Text>Timer: {timer} seconds</Text>
+          {!isNumberValid && <Text>Please Enter a Number in 1 - 100</Text>}
+          {hintsGiven && <Text>{hint}</Text>}
+          <Button title="Use a Hint" onPress={giveHint} />
+          <Button title="Submit Guess" onPress={submitGuess} />
+
+          
+            <Information
+              visibility={isInfoVisible}
+              texts={infoTexts}
+              images={infoImages}
+              buttons={infoButtons}
+              winning={isWinning}
+            />
+          
+        </View>
+      </SafeAreaView>
+    </Modal>
   );
 };
 
@@ -137,14 +149,29 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)", // Ensure background overlay
+  },
+  topContainer: {
+    flex: 1,
+    width: "100%",
+    paddingHorizontal: 20,
+    paddingTop: 10,
+    alignItems: "flex-end",
+    justifyContent: "flex-end",
+  },
+  restartButton: {
+    marginBottom: 10,
   },
   guessContainer: {
-    backgroundColor: "gray",
+    flex: 4,
+    backgroundColor: "white", // Ensure the game area is clear
     padding: 10,
-    width: "80%",
+    height: "70%",
+    width: "70%",
     marginTop: 20,
     alignItems: "center",
     justifyContent: "center",
-    gap: 10,
+    borderRadius: 10,
+    position: "relative",
   },
 });
