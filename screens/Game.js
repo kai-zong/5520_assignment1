@@ -54,6 +54,7 @@ const GameComponent = ({ initialTime, initialAttempts, onRestart }) => {
     }
     setIsNumberValid(true);
     if (guessNumber === number) {
+      setIsInfoVisible(true);
       setInfoTexts(["You win!"]);
       setInfoTexts((currentTexts) => [...currentTexts, "Attempts used: " + (initialAttempts - guessesLeft)]);
       setInfoImages([`https://picsum.photos/id/${number}/100/100`]);
@@ -61,6 +62,7 @@ const GameComponent = ({ initialTime, initialAttempts, onRestart }) => {
       return;
     }
     if (guessesLeft === 1) {
+      setIsInfoVisible(true);
       setInfoTexts(["You are out of Attempts!", `You lost! The correct number was ${number}.`]);
       setInfoButtons([{ title: "Play Again", onPress: onRestart }]);
       return;
