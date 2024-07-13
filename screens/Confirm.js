@@ -4,13 +4,14 @@ import colors from "../Reusable_Objects/color";
 ;
 
 const Confirm = ({visibility, email, name, goBackHandler, continueHandler}) => {
+    console.log("Confirm")
 
     return(
         <Modal visible={visibility} transparent={true} animationType="slide">
-            <SafeAreaView style={styles.container}>
+            <View style={styles.container}>
                 <View style={styles.messageContainer}>
                 <Header name={`Hello ${name}`} color={colors.purple}/>
-
+                {console.log("Inside")}
                 <Text style={styles.message}>Here is the email that you entered:</Text>
                 <Text style={styles.message}>{email}</Text>    
                 <Text style={styles.message}>
@@ -21,7 +22,7 @@ const Confirm = ({visibility, email, name, goBackHandler, continueHandler}) => {
                 <Button title="Continue" onPress={()=>{continueHandler()}}></Button>
                 </View>
             </View>
-            </SafeAreaView>
+            </View>
         </Modal>
     );
 };

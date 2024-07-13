@@ -13,7 +13,7 @@ import Header from "../components/Header";
 import colors from "../Reusable_Objects/color";
 import {LinearGradient} from "expo-linear-gradient";
 
-function Start({startHandler}) {
+function Start({visibility, startHandler}) {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [nameConfirmed, setNameConfirmed] = useState(false);
@@ -42,6 +42,7 @@ function Start({startHandler}) {
       console.log("name confirmed: ",nameConfirmed,"email confirmed: ", emailConfirmed, "name focuse: ", nameFocused, "email focused: ", emailFocused);
       if(validEmail && validName && notRobot){
         startHandler(name, email);
+        console.log("here");
       }
     };
 
@@ -51,8 +52,8 @@ function Start({startHandler}) {
       setNotRobot(false);
     }
   return (
-    <Modal transparent={true}>
-      <SafeAreaView style={styles.container}>
+    <Modal transparent={true} visible={visibility}>
+      <View style={styles.container}>
         <Header name={"Welcome"} color={colors.blue} />
         <View style={styles.inputCard}>
             <View style={styles.divison}>
@@ -109,7 +110,7 @@ function Start({startHandler}) {
         </View>
         </View>
         
-      </SafeAreaView>
+      </View>
     </Modal>
   );
 }

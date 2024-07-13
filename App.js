@@ -14,6 +14,7 @@ export default function App() {
   const [confirmIsVisible, setConfirmIsVisible] = useState(false);
   const [gameIsVisible, setGameIsVisible] = useState(false);
   const [renderGame, setRenderGame] = useState(false);
+  const [startIsVisible, setStartIsVisible] = useState(true);
 
 
 
@@ -21,6 +22,7 @@ export default function App() {
     setName(name);
     setEmail(email);
     setConfirmIsVisible(true);
+    setStartIsVisible(false);
   };
 
   const handleContinue = () => {
@@ -31,12 +33,14 @@ export default function App() {
 
   const handleGoBack = () => {
     setConfirmIsVisible(false);
+    setStartIsVisible(true);
   }
 
   const handleRestart = () => {
     setGameIsVisible(false);
     setRenderGame(false);
     setConfirmIsVisible(false);
+    setStartIsVisible(true);
     setName("");
     setEmail("");
   }
@@ -48,8 +52,9 @@ export default function App() {
         style={styles.background}/>
       <View>
       {!gameIsVisible && (
-        <Start startHandler={handleStart}></Start>
+        <Start visibility={startIsVisible} startHandler={handleStart}></Start>
       )}
+      {console.log("confirmVisible: ", confirmIsVisible)}
       {confirmIsVisible && (
         <Confirm 
           visibility={confirmIsVisible} 
