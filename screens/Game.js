@@ -38,6 +38,7 @@ const GameComponent = ({ initialTime, initialAttempts, onRestart, visibility}) =
   const [infoButtons, setInfoButtons] = useState([]);
   const [isNumberValid, setIsNumberValid] = useState(true);
   const [isWinning, setIsWinning] = useState(false);
+  const [isGameVisible, setIsGameVisible] = useState(true);
 
   const giveHint = () => {
     setHintsGiven(true);
@@ -50,6 +51,7 @@ const GameComponent = ({ initialTime, initialAttempts, onRestart, visibility}) =
 
   const endGame = () => {
     setIsInfoVisible(true);
+    setIsGameVisible(false);
     setInfoTexts(["You ended the game!"]);
     setInfoImages([]);
     setInfoButtons([{ title: "Play Again", onPress: onRestart }]);
@@ -66,6 +68,7 @@ const GameComponent = ({ initialTime, initialAttempts, onRestart, visibility}) =
     setIsNumberValid(true);
     if (guessNumber === number) {
       const updatedGuessesLeft = guessesLeft - 1;
+      setIsGameVisible(false);
       setIsInfoVisible(true);
       setGuessesLeft(updatedGuessesLeft);
       setInfoTexts(["You win!", `Attempts used: ${initialAttempts - updatedGuessesLeft}`]);
@@ -76,6 +79,7 @@ const GameComponent = ({ initialTime, initialAttempts, onRestart, visibility}) =
     }
     if (guessesLeft === 1) {
       setIsWinning(false);
+      setIsGameVisible(false);
       setIsInfoVisible(true);
       setInfoTexts(["You are out of Attempts!", `You lost! The correct number was ${number}.`]);
       setInfoImages([]);
@@ -85,10 +89,12 @@ const GameComponent = ({ initialTime, initialAttempts, onRestart, visibility}) =
     setGuessesLeft(prevGuessesLeft => prevGuessesLeft - 1);
     setIsWinning(true);
     setIsInfoVisible(true);
+    setIsGameVisible(false);
     setInfoImages([]);
     setInfoTexts(["Wrong guess! Try again."]);
     setInfoButtons( [{ title: "OK", onPress: () => {setIsInfoVisible(false)
       setGuess("");
+      setIsGameVisible(true);
     } }, {title: "End Game", onPress: endGame}]);
   };
 
@@ -103,6 +109,7 @@ const GameComponent = ({ initialTime, initialAttempts, onRestart, visibility}) =
 
     if (timer === 0 && !isInfoVisible) {
       setIsWinning(false);
+      setIsGameVisible(false);
       setInfoTexts(["Time's up! You are out of time."]);
       setIsInfoVisible(true);
       setInfoTexts((currentTexts) => [...currentTexts, `You lost! The correct number was ${number}.`]);
@@ -113,10 +120,10 @@ const GameComponent = ({ initialTime, initialAttempts, onRestart, visibility}) =
   return (
     <Modal visible={visibility} transparent={true} animationType="slide">
       <SafeAreaView style={styles.container}>
-        <View style={styles.topContainer}>
+        <View style={styles.restartButtonContainer}>
           <Button title="Restart" onPress={onRestart} style={styles.restartButton} />
         </View>
-        <View style={styles.guessContainer}>
+        {isGameVisible && <View style={styles.guessContainer}>
           <Header name="Guess a number between 1 & 100" color="blue" />
           <TextInput
             style={styles.inputText}
@@ -128,22 +135,21 @@ const GameComponent = ({ initialTime, initialAttempts, onRestart, visibility}) =
           <Text>{number}</Text>
           <Text>Guesses left: {guessesLeft}</Text>
           <Text>Timer: {timer} seconds</Text>
-          {!isNumberValid && <Text>Please Enter a Number in 1 - 100</Text>}
+          {!isNumberValid && <Text style={styles.errorText}>Please Enter a Number in 1 - 100</Text>}
           {hintsGiven && <Text>{hint}</Text>}
           <View style={styles.buttonRow}>
           <Button title="Use a Hint" onPress={giveHint} />
           <Button title="Submit Guess" onPress={submitGuess} />
           </View>
+          </View>}
           
-            <Information
-              visibility={isInfoVisible}
+            {isInfoVisible && <Information
               texts={infoTexts}
               images={infoImages}
               buttons={infoButtons}
               winning={isWinning}
-            />
+            />}
           
-        </View>
       </SafeAreaView>
     </Modal>
   );
@@ -156,15 +162,16 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: "black",
     padding: 10,
-    margin: 10,
+    marginVertical: 10,
+    borderRadius: 5,
   },
   container: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)", // Ensure background overlay
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
-  topContainer: {
+  restartButtonContainer: {
     width: "100%",
     paddingHorizontal: 20,
     paddingTop: 10,
@@ -172,13 +179,10 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     marginBottom: 20,
   },
-  restartButton: {
-    marginBottom: 10,
-  },
   guessContainer: {
     width: "80%",
     backgroundColor: "white",
-    padding: 10,
+    padding: 20,
     borderRadius: 10,
     alignItems: "center",
     justifyContent: "center",
@@ -187,6 +191,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     width: "100%",
+    marginTop: 20,
+  },
+  errorText: {
+    color: "red",
     marginTop: 10,
   },
 });

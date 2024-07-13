@@ -51,11 +51,8 @@ function Start({startHandler}) {
       setNotRobot(false);
     }
   return (
-    <Modal>
+    <Modal transparent={true}>
       <SafeAreaView style={styles.container}>
-        <LinearGradient 
-        colors={['rgba(0,0,0,0.8)', 'transparent']}
-        style={styles.background}/>
         <Header name={"Welcome"} color={colors.blue} />
         <View style={styles.inputCard}>
             <View style={styles.divison}>
@@ -120,16 +117,9 @@ function Start({startHandler}) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.blue,
+    
     alignItems: "center",
     justifyContent: "center",
-  },
-  background: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    top: 0,
-    height: 300,
   },
   inputCard: {
     backgroundColor: colors.gray, // Set the background color

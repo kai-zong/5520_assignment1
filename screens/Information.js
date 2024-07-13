@@ -1,11 +1,11 @@
 import React from 'react';
-import { Text, Modal, View, Image, Button, SafeAreaView, StyleSheet } from 'react-native';
+import { Text, View, Image, Button, SafeAreaView, StyleSheet } from 'react-native';
 import colors from '../Reusable_Objects/color';
 
-const Information = ({ visibility, texts, images, buttons, winning }) => {
+const Information = ({ texts, images, buttons, winning }) => {
   return (
     
-    <Modal visible={visibility} transparent={true} animationType="slide">
+    
         <SafeAreaView style={styles.container}>
       <View style={styles.infoContainer}>
         {texts.map((text, index) => (
@@ -24,7 +24,6 @@ const Information = ({ visibility, texts, images, buttons, winning }) => {
       </View>
       </View>
       </SafeAreaView>
-    </Modal>
     
   );
 };
@@ -40,7 +39,7 @@ const styles = StyleSheet.create({
     },
     infoContainer:{
         width:"80%",
-        height:"60%",
+        height:"30%",
         padding:10,
         backgroundColor:colors.gray,
         borderRadius:10,
