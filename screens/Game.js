@@ -4,7 +4,7 @@ import Header from "../components/Header";
 import Information from "./Information";
 import colors from "../Reusable_Objects/color";
 
-const Game = ({infoVisibilityHandler}) => {
+const Game = ({visibility}) => {
   const initialTime = 60;
   const initialAttempts = 4;
   const [gameKey, setGameKey] = useState(0);
@@ -17,6 +17,7 @@ const Game = ({infoVisibilityHandler}) => {
   return (
     <GameComponent
       key={gameKey}
+      visibility={visibility}
       initialTime={initialTime}
       initialAttempts={initialAttempts}
       onRestart={restartGame}
@@ -24,7 +25,7 @@ const Game = ({infoVisibilityHandler}) => {
   );
 };
 
-const GameComponent = ({ initialTime, initialAttempts, onRestart }) => {
+const GameComponent = ({ initialTime, initialAttempts, onRestart, visibility}) => {
   const [timer, setTimer] = useState(initialTime);
   const [guessesLeft, setGuessesLeft] = useState(initialAttempts);
   const [hint, setHint] = useState("");
@@ -45,6 +46,14 @@ const GameComponent = ({ initialTime, initialAttempts, onRestart }) => {
     } else {
       setHint("The number is odd");
     }
+  };
+
+  const endGame = () => {
+    setIsInfoVisible(true);
+    setInfoTexts(["You ended the game!"]);
+    setInfoImages([]);
+    setInfoButtons([{ title: "Play Again", onPress: onRestart }]);
+    setIsWinning(false);
   };
 
   const submitGuess = () => {
@@ -74,10 +83,13 @@ const GameComponent = ({ initialTime, initialAttempts, onRestart }) => {
       return;
     }
     setGuessesLeft(prevGuessesLeft => prevGuessesLeft - 1);
+    setIsWinning(true);
     setIsInfoVisible(true);
     setInfoImages([]);
     setInfoTexts(["Wrong guess! Try again."]);
-    setInfoButtons( [{ title: "OK", onPress: () => setIsInfoVisible(false) }, {title: "End Game", onPress: onRestart}]);
+    setInfoButtons( [{ title: "OK", onPress: () => {setIsInfoVisible(false)
+      setGuess("");
+    } }, {title: "End Game", onPress: endGame}]);
   };
 
   useEffect(() => {
@@ -99,7 +111,7 @@ const GameComponent = ({ initialTime, initialAttempts, onRestart }) => {
   }, [timer]);
 
   return (
-    <Modal visible={true}>
+    <Modal visible={visibility}>
       <SafeAreaView style={styles.container}>
         <View style={styles.topContainer}>
           <Button title="Restart" onPress={onRestart} style={styles.restartButton} />

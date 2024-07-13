@@ -3,7 +3,7 @@ import Header from "../components/Header";
 import colors from "../Reusable_Objects/color";
 ;
 
-const Confirm = ({visibility, email, name, goBackHandler}) => {
+const Confirm = ({visibility, email, name, goBackHandler, continueHandler}) => {
 
     return(
         <Modal visible={visibility} transparent={true} animationType="slide">
@@ -18,7 +18,7 @@ const Confirm = ({visibility, email, name, goBackHandler}) => {
                 </Text>
                 <View style={styles.buttons}>
                 <Button title="Go Back" onPress={()=>{goBackHandler()}}></Button>
-                <Button title="Continue" onPress={()=>{}}></Button>
+                <Button title="Continue" onPress={()=>{continueHandler()}}></Button>
                 </View>
             </View>
             </SafeAreaView>
