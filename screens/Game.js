@@ -130,9 +130,10 @@ const GameComponent = ({ initialTime, initialAttempts, onRestart, visibility}) =
           <Text>Timer: {timer} seconds</Text>
           {!isNumberValid && <Text>Please Enter a Number in 1 - 100</Text>}
           {hintsGiven && <Text>{hint}</Text>}
+          <View style={styles.buttonRow}>
           <Button title="Use a Hint" onPress={giveHint} />
           <Button title="Submit Guess" onPress={submitGuess} />
-
+          </View>
           
             <Information
               visibility={isInfoVisible}
@@ -164,7 +165,6 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, 0.5)", // Ensure background overlay
   },
   topContainer: {
-    flex: 1,
     width: "100%",
     paddingHorizontal: 20,
     paddingTop: 10,
@@ -175,15 +175,17 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   guessContainer: {
-    flex: 4,
-    backgroundColor: "white", // Ensure the game area is clear
+    width: "80%",
+    backgroundColor: "white",
     padding: 10,
-    height: "70%",
-    width: "70%",
-    marginTop: 20,
+    borderRadius: 10,
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 10,
-    position: "relative",
+  },
+  buttonRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+    marginTop: 10,
   },
 });

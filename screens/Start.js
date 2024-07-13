@@ -11,6 +11,7 @@ import Checkbox from 'expo-checkbox';
 import { useState } from "react";
 import Header from "../components/Header";
 import colors from "../Reusable_Objects/color";
+import {LinearGradient} from "expo-linear-gradient";
 
 function Start({startHandler}) {
     const [name, setName] = useState("");
@@ -50,6 +51,9 @@ function Start({startHandler}) {
   return (
     <Modal>
       <SafeAreaView style={styles.container}>
+        <LinearGradient 
+        colors={['rgba(0,0,0,0.8)', 'transparent']}
+        style={styles.background}/>
         <Header name={"Welcome"} color={colors.blue} />
         <View style={styles.inputCard}>
             <View style={styles.divison}>
@@ -112,6 +116,13 @@ const styles = StyleSheet.create({
     backgroundColor: colors.blue,
     alignItems: "center",
     justifyContent: "center",
+  },
+  background: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    height: 300,
   },
   inputCard: {
     backgroundColor: colors.gray, // Set the background color
