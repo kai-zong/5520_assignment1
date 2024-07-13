@@ -61,6 +61,7 @@ export default function App() {
       )}
       {renderGame && (
           <Game 
+            startHandler={handleRestart}
             visibility={gameIsVisible} 
           />
       )}

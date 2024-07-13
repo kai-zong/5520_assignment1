@@ -6,7 +6,7 @@ const Information = ({ texts, images, buttons, winning }) => {
   return (
     
     
-        <SafeAreaView style={styles.container}>
+        
       <View style={styles.infoContainer}>
         {texts.map((text, index) => (
           <Text key={index}>{text}</Text>
@@ -23,7 +23,7 @@ const Information = ({ texts, images, buttons, winning }) => {
         ))}
       </View>
       </View>
-      </SafeAreaView>
+     
     
   );
 };

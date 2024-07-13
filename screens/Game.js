@@ -4,7 +4,7 @@ import Header from "../components/Header";
 import Information from "./Information";
 import colors from "../Reusable_Objects/color";
 
-const Game = ({visibility}) => {
+const Game = ({visibility, startHandler}) => {
   const initialTime = 60;
   const initialAttempts = 4;
   const [gameKey, setGameKey] = useState(0);
@@ -21,11 +21,12 @@ const Game = ({visibility}) => {
       initialTime={initialTime}
       initialAttempts={initialAttempts}
       onRestart={restartGame}
+      startHandler={startHandler}
     />
   );
 };
 
-const GameComponent = ({ initialTime, initialAttempts, onRestart, visibility}) => {
+const GameComponent = ({ initialTime, initialAttempts, onRestart, visibility, startHandler}) => {
   const [timer, setTimer] = useState(initialTime);
   const [guessesLeft, setGuessesLeft] = useState(initialAttempts);
   const [hint, setHint] = useState("");
@@ -121,7 +122,7 @@ const GameComponent = ({ initialTime, initialAttempts, onRestart, visibility}) =
     <Modal visible={visibility} transparent={true} animationType="slide">
       <SafeAreaView style={styles.container}>
         <View style={styles.restartButtonContainer}>
-          <Button title="Restart" onPress={onRestart} style={styles.restartButton} />
+          <Button title="Restart" onPress={startHandler} style={styles.restartButton} />
         </View>
         {isGameVisible && <View style={styles.guessContainer}>
           <Header name="Guess a number between 1 & 100" color="blue" />
