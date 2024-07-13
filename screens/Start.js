@@ -25,20 +25,22 @@ function Start({startHandler}) {
     const checkName = () => {
         const isEveryCharNaN = name.split('').every(char => isNaN(char));
         setNameConfirmed(isEveryCharNaN && name.length > 1);
+        return isEveryCharNaN && name.length > 1;
     };
     const checkEmail = () => {
         const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-        console.log("is Valid email",isValidEmail);
         setEmailConfirmed(isValidEmail);
+        return isValidEmail;
+        
     };
     const checkInputs = () => {
-      checkEmail(email);
-      checkName(name);
+      const validEmail = checkEmail();
+      const validName = checkName();
       setEmailFocused(false);
       setNameFocused(false);
       console.log(name, email);
       console.log("name confirmed: ",nameConfirmed,"email confirmed: ", emailConfirmed, "name focuse: ", nameFocused, "email focused: ", emailFocused);
-      if(nameConfirmed && emailConfirmed && notRobot){
+      if(validEmail && validName && notRobot){
         startHandler(name, email);
       }
     };
@@ -63,9 +65,11 @@ function Start({startHandler}) {
             style={styles.textInput}
             onChangeText={(text) => {
               setName(text);
+              checkName();
             }}
             onFocus={()=>{setNameFocused(true)}}
-            onBlur={()=>{checkName
+            onBlur={()=>{
+              checkName();
               setNameFocused(false)}
             }
           ></TextInput>
@@ -75,9 +79,12 @@ function Start({startHandler}) {
           <Header name={"Email address"} color={colors.purple}></Header>
           <TextInput style={styles.textInput}
           value={email}
-          onChangeText={(text)=>{setEmail(text)}}
+          onChangeText={(text)=>{setEmail(text);
+            checkEmail();
+          }}
           onFocus={()=>setEmailFocused(true)}
-          onBlur={()=>{checkEmail
+          onBlur={()=>{
+            checkEmail();
             setEmailFocused(false)
           }} >
           </TextInput>

@@ -170,6 +170,7 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     alignItems: "flex-end",
     justifyContent: "flex-end",
+    marginBottom: 20,
   },
   restartButton: {
     marginBottom: 10,
