@@ -4,6 +4,7 @@ import Start from "./screens/Start";
 import { useState }  from 'react';
 import Confirm from "./screens/Confirm";
 import Game from './screens/Game';
+import colors from './Reusable_Objects/color';
 
 export default function App() {
 
@@ -36,9 +37,11 @@ export default function App() {
 
   return (
     <View style={styles.container}>
+      <View>
       <Start startHandler={handleStart}></Start>
       <Confirm visibility={confirmIsVisible} email={email} name={name} goBackHandler={handleGoBack} continueHandler={handleContinue}></Confirm>
       { renderGame && <Game visibility={gameIsVisible}/>}
+      </View>
       <StatusBar style="auto" />
     </View>
   );
@@ -47,7 +50,6 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
   },

@@ -5,7 +5,7 @@ import colors from '../Reusable_Objects/color';
 const Information = ({ visibility, texts, images, buttons, winning }) => {
   return (
     
-    <Modal visible={visibility} transparent={false}>
+    <Modal visible={visibility} transparent={true} animationType="slide">
         <SafeAreaView style={styles.container}>
       <View style={styles.infoContainer}>
         {texts.map((text, index) => (

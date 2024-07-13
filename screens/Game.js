@@ -111,7 +111,7 @@ const GameComponent = ({ initialTime, initialAttempts, onRestart, visibility}) =
   }, [timer]);
 
   return (
-    <Modal visible={visibility}>
+    <Modal visible={visibility} transparent={true} animationType="slide">
       <SafeAreaView style={styles.container}>
         <View style={styles.topContainer}>
           <Button title="Restart" onPress={onRestart} style={styles.restartButton} />

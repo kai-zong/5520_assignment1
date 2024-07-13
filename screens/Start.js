@@ -45,6 +45,7 @@ function Start({startHandler}) {
     const clearInputs = () => {
       setName("");
       setEmail("");
+      setNotRobot(false);
     }
   return (
     <Modal>
@@ -108,7 +109,7 @@ function Start({startHandler}) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: colors.blue,
     alignItems: "center",
     justifyContent: "center",
   },
